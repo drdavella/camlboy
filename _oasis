@@ -11,6 +11,9 @@ License: MIT with OCaml linking exception
 Description: It hopefully emulates a GameBoy Color
 Homepage: https://github.com/drdavella
 
+BuildDepends:
+  core,ppx_jane,threads
+
 Executable "main"
   Path: src
   MainIs: main.ml
