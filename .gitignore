@@ -5,3 +5,8 @@ _build
 
 setup.data
 setup.log
+
+myocamlbuild.ml
+
+*.gb
+roms
