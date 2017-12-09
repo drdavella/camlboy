@@ -12,9 +12,10 @@ Description: It hopefully emulates a GameBoy Color
 Homepage: https://github.com/drdavella
 
 BuildDepends:
-  core,ppx_jane,threads
+  core,ppx_jane,threads,bitstring,ppx_bitstring
 
 Executable "main"
   Path: src
   MainIs: main.ml
+  BuildTools: ocamlfind
   CompiledObject: best
