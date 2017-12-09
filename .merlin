@@ -1,0 +1,5 @@
+S src
+B src
+PKG bitstring
+PKG ppx_bitstring
+EXT ppx_bitstring
