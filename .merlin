@@ -1,5 +1,6 @@
 S src
-B src
+B _build/**
+PKG core
 PKG bitstring
 PKG ppx_bitstring
 EXT ppx_bitstring
