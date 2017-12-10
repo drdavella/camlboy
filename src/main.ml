@@ -13,9 +13,7 @@ let read_rom filename =
 
 let run filename =
   let rom_array = read_rom filename in
-  let rom_size = Array.length rom_array in
-  printf "rom file=%s, size=%d\n" filename rom_size;
-  Cpu.emulate rom_array 0 rom_size
+  Cpu.emulate rom_array
 
 let spec =
   let open Command.Spec in
