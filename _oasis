@@ -12,7 +12,7 @@ Description: It hopefully emulates a GameBoy Color
 Homepage: https://github.com/drdavella
 
 BuildDepends:
-  core,ppx_jane,threads,bitstring,ppx_bitstring
+  core,ppx_jane,threads,bitstring,ppx_bitstring,ctypes
 
 Executable "main"
   Path: src
