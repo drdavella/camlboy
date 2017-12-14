@@ -5,8 +5,8 @@ let rom_start_index = UInt16.of_int 0x100
 type game_state =
   {
     mutable pc : uint16;
-    flags : uint8;
-    ticks : int;
+    mutable flags : uint8;
+    mutable ticks : int;
   }
 
 let init_game_state =
