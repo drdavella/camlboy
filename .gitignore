@@ -10,3 +10,6 @@ myocamlbuild.ml
 
 *.gb
 roms
+
+_tags
+:merlin-log:
