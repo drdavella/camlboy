@@ -16,7 +16,10 @@ let disable_interrupts state =
 
 let next_bytes rom_array pc = Array.slice rom_array (pc + 1) 0
 
-let decode opcode rom_array state =
+let print_debug pc opcode ticks msg =
+    printf "pc[0x%04x]=0x%02x, ticks=%4d, %s\n" pc opcode ticks msg
+
+let decode opcode rom_array state debug =
   let pc = UInt16.to_int state.pc in
   let%bitstring bits = {|opcode : 8|} in
   let state, ticks, log_msg =
@@ -32,12 +35,15 @@ let decode opcode rom_array state =
   in
   (* UPDATE TICK COUNT *)
   state.ticks <- (state.ticks + ticks);
-  printf "pc[0x%04x]=0x%02x, ticks=%4d, %s\n" pc opcode state.ticks log_msg
+  (* PRINT DEBUG INFO *)
+  match debug with
+  | true -> print_debug pc opcode state.ticks log_msg
+  | false -> ()
 
-let rec run_loop rom_array state =
+let rec run_loop rom_array state debug =
   let index = UInt16.to_int state.pc in
-  decode (rom_array.(index)) rom_array state;
-  run_loop rom_array state
+  decode (rom_array.(index)) rom_array state debug;
+  run_loop rom_array state debug
 
-let emulate rom_array =
-  run_loop rom_array init_game_state
+let emulate rom_array debug =
+  run_loop rom_array init_game_state debug
