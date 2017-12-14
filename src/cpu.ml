@@ -1,5 +1,6 @@
 open Core
 open Types
+open Unsigned
 
 exception UnrecognizedOpcode of string
 
@@ -13,7 +14,7 @@ let nop state =
 let next_bytes rom_array pc = Array.slice rom_array (pc + 1) 0
 
 let decode opcode rom_array state =
-  let pc = Unsigned.UInt16.to_int state.pc in
+  let pc = UInt16.to_int state.pc in
   let%bitstring bits = {|opcode : 8|} in
   let state, ticks, log_msg =
     match%bitstring bits with
@@ -27,7 +28,7 @@ let decode opcode rom_array state =
   printf "pc[0x%04x]=0x%02x %s\n" opcode pc log_msg
 
 let rec run_loop rom_array state =
-  let index = Unsigned.UInt16.to_int state.pc in
+  let index = UInt16.to_int state.pc in
   decode (rom_array.(index)) rom_array state;
   run_loop rom_array state
 

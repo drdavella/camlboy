@@ -1,5 +1,9 @@
 open Core
+open Types
+open Unsigned
 
 let uncond_imm code_bytes state =
-  let msg = sprintf "0x%02x" code_bytes.(0) in
-  (Utils.increment_pc state 1), 2, msg
+  let addr = Utils.pack_ints_to_u16 code_bytes.(1) code_bytes.(0) in
+  let msg = sprintf "JUMP TO 0x%04x" (UInt16.to_int addr) in
+  state.pc <- addr;
+  state , 2, msg
