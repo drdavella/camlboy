@@ -2,6 +2,7 @@ open Core
 open Types
 open Unsigned
 
+exception HaltInstruction of string
 exception UnrecognizedOpcode of string
 
 let unknown_opcode opcode pc =
@@ -13,6 +14,10 @@ let nop state =
 
 let disable_interrupts state =
   (Utils.increment_pc state 1), 4, "DI"
+
+let halt pc =
+  let msg = sprintf "encountered halt instruction at pc 0x%04x" pc in
+  raise (HaltInstruction msg)
 
 let next_bytes rom_array pc = Array.slice rom_array (pc + 1) 0
 
@@ -28,6 +33,8 @@ let decode opcode rom_array state debug =
     | {| 0x00 : 8 |} -> nop state
     (* DISABLE INTERRUPTS *)
     | {| 0xf3 : 8 |} -> disable_interrupts state
+    (* HALT INSTRUCTION -- must be matched before load instructions *)
+    | {| 0x76 : 8 |} -> halt pc
     (* UNCONDITIONAL JUMP IMM *)
     | {| 0xc3 : 8 |} -> Jump.uncond_imm (next_bytes rom_array pc) state
     (* UNKNOWN INSTRUCTION *)
