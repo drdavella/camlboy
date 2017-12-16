@@ -21,11 +21,17 @@ let halt pc =
 
 let next_bytes rom_array pc = Array.slice rom_array (pc + 1) 0
 
+let is_load high_byte =
+  match high_byte with
+  | _ when high_byte >= 0x4 && high_byte <= 0x7 -> true
+  | _ -> false
+
 let print_debug pc opcode ticks msg =
     printf "pc[0x%04x]=0x%02x, ticks=%4d, %s\n" pc opcode ticks msg
 
 let decode opcode rom_array state debug =
   let pc = UInt16.to_int state.pc in
+  let code_bytes = next_bytes rom_array pc in
   let%bitstring bits = {|opcode : 8|} in
   let state, ticks, log_msg =
     match%bitstring bits with
@@ -36,7 +42,10 @@ let decode opcode rom_array state debug =
     (* HALT INSTRUCTION -- must be matched before load instructions *)
     | {| 0x76 : 8 |} -> halt pc
     (* UNCONDITIONAL JUMP IMM *)
-    | {| 0xc3 : 8 |} -> Jump.uncond_imm (next_bytes rom_array pc) state
+    | {| 0xc3 : 8 |} -> Jump.uncond_imm code_bytes state
+    (* LOAD INSTRUCTIONS *)
+    | {| high_byte : 4; low_byte : 4 |} when is_load high_byte ->
+        Memory.load_register high_byte low_byte code_bytes state
     (* UNKNOWN INSTRUCTION *)
     | {| _ |} -> unknown_opcode opcode pc
   in
