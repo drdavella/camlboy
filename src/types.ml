@@ -1,6 +1,8 @@
 open Core
 open Unsigned
 
+exception NotImplemented of string
+
 let rom_start_index = UInt16.of_int 0x100
 
 type real_register =
@@ -26,13 +28,13 @@ let register_to_str reg =
 
 type registers =
   {
-    mutable a  : uint16;
-    mutable b  : uint16;
-    mutable c  : uint16;
-    mutable d  : uint16;
-    mutable e  : uint16;
-    mutable h  : uint16;
-    mutable l  : uint16;
+    mutable a  : uint8;
+    mutable b  : uint8;
+    mutable c  : uint8;
+    mutable d  : uint8;
+    mutable e  : uint8;
+    mutable h  : uint8;
+    mutable l  : uint8;
   }
 
 type game_state =
@@ -52,12 +54,12 @@ let init_game_state =
     memory = Array.create ~len:100 (UInt16.of_int 0);
     registers =
     {
-      a = UInt16.of_int 0;
-      b = UInt16.of_int 0;
-      c = UInt16.of_int 0;
-      d = UInt16.of_int 0;
-      e = UInt16.of_int 0;
-      h = UInt16.of_int 0;
-      l = UInt16.of_int 0;
+      a = UInt8.of_int 0;
+      b = UInt8.of_int 0;
+      c = UInt8.of_int 0;
+      d = UInt8.of_int 0;
+      e = UInt8.of_int 0;
+      h = UInt8.of_int 0;
+      l = UInt8.of_int 0;
     }
   }

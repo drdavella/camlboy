@@ -45,7 +45,7 @@ let decode opcode rom_array state debug =
     | {| 0xc3 : 8 |} -> Jump.uncond_imm code_bytes state
     (* LOAD INSTRUCTIONS *)
     | {| high_byte : 4; low_byte : 4 |} when is_load high_byte ->
-        Memory.load_register high_byte low_byte code_bytes state
+        Memory.load_register high_byte low_byte state
     (* UNKNOWN INSTRUCTION *)
     | {| _ |} -> unknown_opcode opcode pc
   in
