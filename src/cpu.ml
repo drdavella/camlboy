@@ -47,8 +47,11 @@ let decode opcode rom_array state debug =
     | {| high_byte : 4; low_byte : 4 |} when is_load high_byte ->
         Memory.load_register high_byte low_byte state
     (* XOR REGISTER *)
-    | {| 0xa : 4; low_byte : 4|} when low_byte >= 0x8 ->
+    | {| 0xa : 4; low_byte : 4 |} when low_byte >= 0x8 ->
         Alu.xor_register state low_byte
+    (* LOAD IMM DWORD *)
+    | {| high_byte : 4; 0x1 : 4 |} when high_byte <= 0x3 ->
+        Memory.load_imm_d high_byte code_bytes state
     (* UNKNOWN INSTRUCTION *)
     | {| _ |} -> unknown_opcode opcode pc
   in

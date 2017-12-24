@@ -1,5 +1,6 @@
 open Core
 open Types
+open Unsigned
 
 
 let source_dest_str dest source =
@@ -24,3 +25,14 @@ let load_register high low state =
   in
   let msg = (sprintf "LD ") ^ (source_dest_str dest_reg source_reg) in
   (Utils.increment_pc state 1), tick, msg
+
+let load_imm_d high code_bytes state =
+  let dest = compound_array.(high) in
+  let imm_val = Utils.pack_ints_to_u16 code_bytes.(1) code_bytes.(0) in
+  let () = match dest with
+  | SP -> state.sp <- imm_val
+  | _ -> raise (NotImplemented "LD whatever is not yet implemented")
+  in
+  let msg = sprintf "LD IMM %s <- 0x%04x"
+    (comp_to_str dest) (UInt16.to_int imm_val) in
+  (Utils.increment_pc state 3), 12, msg
