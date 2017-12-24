@@ -15,7 +15,7 @@ type named_register =
 let register_array =
   Array.of_list [ Reg B ; Reg C ; Reg D ; Reg E ; Reg H ; Reg L ; HL; Reg A ]
 
-let register_to_str reg =
+let reg_to_str reg =
   match reg with
   | Reg A -> "A"
   | Reg B -> "B"
@@ -24,7 +24,7 @@ let register_to_str reg =
   | Reg E -> "E"
   | Reg H -> "H"
   | Reg L -> "L"
-  | HL -> "HL"
+  | HL -> "(HL)"
 
 type registers =
   {

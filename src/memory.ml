@@ -2,14 +2,9 @@ open Core
 open Types
 
 
-let add_hl_parens reg =
-  match reg with
-  | "HL" -> sprintf "(%s)" reg
-  | _ -> reg
-
 let source_dest_str dest source =
-  let dest_str = add_hl_parens (register_to_str dest) in
-  let source_str = add_hl_parens (register_to_str source) in
+  let dest_str = reg_to_str dest in
+  let source_str = reg_to_str source in
   sprintf "%s <- %s" dest_str source_str
 
 let dest_index high low =
