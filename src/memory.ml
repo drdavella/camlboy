@@ -26,13 +26,21 @@ let load_register high low state =
   let msg = (sprintf "LD ") ^ (source_dest_str dest_reg source_reg) in
   (Utils.increment_pc state 1), tick, msg
 
+let load_compound_imm dest high low state =
+  let high_reg, low_reg = match dest with
+  | BC -> B, C
+  | DE -> D, E
+  | HL -> H, L
+  in
+  Utils.set_register state high_reg (UInt8.of_int high);
+  Utils.set_register state low_reg (UInt8.of_int low)
+
 let load_imm_d high code_bytes state =
   let dest = compound_array.(high) in
-  let imm_val = Utils.pack_ints_to_u16 code_bytes.(1) code_bytes.(0) in
+  let high, low = code_bytes.(1), code_bytes.(0) in
   let () = match dest with
-  | SP -> state.sp <- imm_val
-  | _ -> raise (NotImplemented "LD whatever is not yet implemented")
+  | Double dest_reg -> load_compound_imm dest_reg high low state
+  | SP -> state.sp <- Utils.pack_ints_to_u16 high low
   in
-  let msg = sprintf "LD IMM %s <- 0x%04x"
-    (comp_to_str dest) (UInt16.to_int imm_val) in
+  let msg = sprintf "LD IMM %s <- 0x%02x%02x" (comp_to_str dest) high low in
   (Utils.increment_pc state 3), 12, msg

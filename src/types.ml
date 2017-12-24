@@ -9,18 +9,22 @@ let sp_start_value = UInt16.of_int 0xfff3
 type real_register =
   | A | B | C | D | E | H | L
 
-type compound_register =
-  | BC | DE | HL | SP
-
 type named_register =
   | Reg of real_register
   | HL
+
+type compound_register =
+  | BC | DE | HL
+
+type double_register =
+  | Double of compound_register
+  | SP
 
 let register_array =
   Array.of_list [ Reg B ; Reg C ; Reg D ; Reg E ; Reg H ; Reg L ; HL; Reg A ]
 
 let compound_array =
-  Array.of_list [ BC; DE; HL; SP ]
+  Array.of_list [ Double BC; Double DE; Double HL; SP ]
 
 let reg_to_str reg =
   match reg with
@@ -35,9 +39,9 @@ let reg_to_str reg =
 
 let comp_to_str reg =
   match reg with
-  | BC -> "BC"
-  | DE -> "DE"
-  | HL -> "HL"
+  | Double BC -> "BC"
+  | Double DE -> "DE"
+  | Double HL -> "HL"
   | SP -> "SP"
 
 type registers =
