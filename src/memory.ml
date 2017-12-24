@@ -44,3 +44,13 @@ let load_imm_d high code_bytes state =
   in
   let msg = sprintf "LD IMM %s <- 0x%02x%02x" (comp_to_str dest) high low in
   (Utils.increment_pc state 3), 12, msg
+
+let load_imm high low code_bytes state =
+  let imm_val = code_bytes.(0) in
+  let dest_reg = register_array.((low / 0x8) + (high * 2) + 1) in
+  let tick = match dest_reg with
+  | Reg dest -> Utils.set_register state dest (UInt8.of_int imm_val); 8
+  | HL -> raise (NotImplemented "LD IMM (HL) is not yet implemented")
+  in
+  let msg = sprintf "LD IMM %s <- 0x%02x" (reg_to_str dest_reg) imm_val in
+  (Utils.increment_pc state 2), tick, msg
