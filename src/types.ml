@@ -61,7 +61,7 @@ type game_state =
     mutable sp : uint16;
     mutable flags : uint8;
     mutable ticks : int;
-    memory : UInt16.t Array.t;
+    memory : UInt8.t Array.t;
     registers : registers;
   }
 
@@ -71,7 +71,7 @@ let init_game_state =
     sp = sp_start_value;
     flags = UInt8.of_int 0;
     ticks = 0;
-    memory = Array.create ~len:100 (UInt16.of_int 0);
+    memory = Array.create ~len:0x10000 (UInt8.of_int 0);
     registers =
     {
       a = UInt8.of_int 0;

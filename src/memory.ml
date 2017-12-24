@@ -54,3 +54,22 @@ let load_imm high low code_bytes state =
   in
   let msg = sprintf "LD IMM %s <- 0x%02x" (reg_to_str dest_reg) imm_val in
   (Utils.increment_pc state 2), tick, msg
+
+let read_hl state =
+  let high = UInt8.to_int (Utils.get_register state H) in
+  let low = UInt8.to_int (Utils.get_register state L) in
+  UInt16.to_int (Utils.pack_ints_to_u16 high low)
+
+let load_hl state value =
+  let%bitstring bits = {|UInt16.to_int value : 16|} in
+  match%bitstring bits with
+  | {| high : 8; low : 8 |} ->
+    Utils.set_register state H (UInt8.of_int high);
+    Utils.set_register state L (UInt8.of_int low);
+;;
+
+let load_and_update operation state =
+  let hl_val = read_hl state in
+  state.memory.(hl_val) <- Utils.get_register state A;
+  load_hl state (operation (UInt16.of_int hl_val));
+  (Utils.increment_pc state 1), 8

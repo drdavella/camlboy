@@ -48,7 +48,11 @@ let decode opcode rom_array state debug =
     | {| 0x76 : 8 |} -> halt pc
     (* UNCONDITIONAL JUMP IMM *)
     | {| 0xc3 : 8 |} -> Jump.uncond_imm code_bytes state
-    (* LOAD INSTRUCTIONS *)
+    (* LD HL-, A *)
+    | {| 0x32 : 8 |} ->
+        let state, ticks = Memory.load_and_update UInt16.succ state in
+        state, ticks, "LD (HL-) A"
+    (* LOAD REGISTER *)
     | {| high_byte : 4; low_byte : 4 |} when is_load high_byte ->
         Memory.load_register high_byte low_byte state
     (* XOR REGISTER *)
