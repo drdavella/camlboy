@@ -12,6 +12,9 @@ let increment_pc state increment =
   state.pc <- UInt16.add state.pc (UInt16.of_int increment);
   state
 
+let vertical_index high low =
+  (low / 0x8) + (high * 2)
+
 let get_register state reg =
   match reg with
   | A -> state.registers.a

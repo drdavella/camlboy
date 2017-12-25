@@ -47,7 +47,7 @@ let load_imm_d high code_bytes state =
 
 let load_imm high low code_bytes state =
   let imm_val = code_bytes.(0) in
-  let dest_reg = register_array.((low / 0x8) + (high * 2) + 1) in
+  let dest_reg = register_array.(Utils.vertical_index high low) in
   let tick = match dest_reg with
   | Reg dest -> Utils.set_register state dest (UInt8.of_int imm_val); 8
   | HL -> raise (NotImplemented "LD IMM (HL) is not yet implemented")

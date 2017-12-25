@@ -22,3 +22,15 @@ let xor_register state low =
   in
   let msg = (sprintf "XOR ") ^ (reg_to_str source_reg) ^ " " ^ result_msg in
   (Utils.increment_pc state 1), tick, msg
+
+let decrement state reg =
+  Utils.set_register state reg (UInt8.pred (Utils.get_register state reg));
+  4
+
+let dec_register state high low =
+  let reg = register_array.(Utils.vertical_index high low) in
+  let tick = match reg with
+  | HL -> raise (NotImplemented "DEC HL is not yet implemented")
+  | Reg register -> decrement state register
+  in
+  (Utils.increment_pc state 1), tick, (sprintf "DEC %s" (reg_to_str reg))

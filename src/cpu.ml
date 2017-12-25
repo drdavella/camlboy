@@ -31,6 +31,11 @@ let is_load_imm high low =
   | _ when high <= 0x3 && ((low % 8) = 0x6) -> true
   | _ -> false
 
+let is_dec high low =
+  match high, low with
+  | _ when high <= 0x3 && ((low % 8) = 0x5) -> true
+  | _ -> false
+
 let print_debug pc opcode ticks msg =
     printf "pc[0x%04x]=0x%02x, ticks=%4d, %s\n" pc opcode ticks msg
 
@@ -55,6 +60,9 @@ let decode opcode rom_array state debug =
     (* LOAD REGISTER *)
     | {| high_byte : 4; low_byte : 4 |} when is_load high_byte ->
         Memory.load_register high_byte low_byte state
+    (* DEC REGISTER *)
+    | {| high_byte : 4; low_byte : 4 |} when is_dec high_byte low_byte ->
+        Alu.dec_register state high_byte low_byte
     (* XOR REGISTER *)
     | {| 0xa : 4; low_byte : 4 |} when low_byte >= 0x8 ->
         Alu.xor_register state low_byte
