@@ -18,12 +18,18 @@ let cond_to_str condition =
   | NoCarry -> "NC"
   | Carry -> "C"
 
-let set_flag flag state =
+let clear_all_flags state =
+  state.flags.n <- false;
+  state.flags.h <- false;
+  state.flags.c <- false;
+  state.flags.z <- false
+
+let set_flag_value flag value state =
   match flag with
-  | Subtract -> state.flags.n = true
-  | Half -> state.flags.h = true
-  | Carry -> state.flags.c = true
-  | Zero -> state.flags.z = true
+  | Subtract -> state.flags.n <- value
+  | Half -> state.flags.h <- value
+  | Carry -> state.flags.c <- value
+  | Zero -> state.flags.z <- value
 
 let get_flag flag state =
   match flag with
