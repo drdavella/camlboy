@@ -55,11 +55,19 @@ type registers =
     mutable l  : uint8;
   }
 
+type flags =
+  {
+    mutable z : bool;
+    mutable n : bool;
+    mutable h : bool;
+    mutable c : bool;
+  }
+
 type game_state =
   {
     mutable pc : uint16;
     mutable sp : uint16;
-    mutable flags : uint8;
+    mutable flags : flags;
     mutable ticks : int;
     memory : UInt8.t Array.t;
     registers : registers;
@@ -69,7 +77,13 @@ let init_game_state =
   {
     pc = rom_start_index;
     sp = sp_start_value;
-    flags = UInt8.of_int 0;
+    flags =
+    {
+      z = false;
+      n = false;
+      h = false;
+      c = false;
+    };
     ticks = 0;
     memory = Array.create ~len:0x10000 (UInt8.of_int 0);
     registers =

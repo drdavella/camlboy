@@ -1,5 +1,6 @@
 open Core
 open Types
+open Flagx
 open Unsigned
 
 exception HaltInstruction of string
@@ -51,6 +52,8 @@ let decode opcode rom_array state debug =
     | {| 0xf3 : 8 |} -> disable_interrupts state
     (* HALT INSTRUCTION -- must be matched before load instructions *)
     | {| 0x76 : 8 |} -> halt pc
+    (* JP NZ *)
+    | {| 0x20 : 8 |} -> Jump.cond_imm NotZero code_bytes state
     (* UNCONDITIONAL JUMP IMM *)
     | {| 0xc3 : 8 |} -> Jump.uncond_imm code_bytes state
     (* LD HL-, A *)
