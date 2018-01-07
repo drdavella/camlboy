@@ -1,8 +1,0 @@
-Currently using OCaml version 4.04.0 since ppx_bitstring wouldn't install
-properly on 4.06.0.
-
-$ opam switch 4.04.0
-$ eval `opam config env`
-$ opam install core
-$ opam install ppx_bitstring
-$ opam install ocamlfind
